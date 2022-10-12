@@ -6,8 +6,8 @@ __license__ = "MIT"
 
 import os
 import tempfile
-from snakemake.shell import shell
 
+from snakemake.shell import shell
 
 extra = snakemake.params.get("extra", "")
 log = snakemake.log_fmt_shell(stdout=False, stderr=True)
@@ -83,3 +83,8 @@ with tempfile.TemporaryDirectory() as tmpdir:
         shell("cat {tmpdir}/Log.progress.out > {snakemake.output.log_progress:q}")
     if snakemake.output.get("log_final"):
         shell("cat {tmpdir}/Log.final.out > {snakemake.output.log_final:q}")
+
+    if "--outReadsUnmapped Fastx" in extra and snakemake.output.get("unmapped_fq1"):
+        shell("cat {tmpdir}/Unmapped.out.mate1 > {snakemake.output.unmapped_fq1:q}")
+    if "--outReadsUnmapped Fastx" in extra and snakemake.output.get("unmapped_fq2"):
+        shell("cat {tmpdir}/Unmapped.out.mate2 > {snakemake.output.unmapped_fq2:q}")
